@@ -1,0 +1,14 @@
+# AWS Configuration
+aws_region = "ap-south-1"
+environment = "dev"
+
+# Database Configuration
+db_username = "dbadmin"
+db_password = "your_secure_password_here"
+db_name     = "bookreviewdb"
+
+# Redis Configuration
+redis_node_type            = "cache.t3.micro"
+redis_num_cache_nodes     = 1
+redis_parameter_group_name = "default.redis6.x"
+redis_engine_version      = "6.x"
