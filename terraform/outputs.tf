@@ -30,18 +30,3 @@ output "rds_database_name" {
   value       = module.rds.rds_database_name
 }
 
-# ElastiCache Outputs
-output "redis_primary_endpoint" {
-  description = "The address of the endpoint for the primary node in the Redis replication group"
-  value       = module.elasticache.redis_primary_endpoint
-}
-
-output "redis_reader_endpoint" {
-  description = "The address of the endpoint for the reader node in the Redis replication group"
-  value       = module.elasticache.redis_reader_endpoint
-}
-
-output "redis_port" {
-  description = "The port number on which the Redis endpoint is accepting connections"
-  value       = module.elasticache.redis_port
-}

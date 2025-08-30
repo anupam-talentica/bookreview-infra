@@ -53,28 +53,3 @@ variable "db_name" {
   type        = string
   default     = "bookreviewdb"
 }
-
-# ElastiCache Variables
-variable "redis_node_type" {
-  description = "Instance type for Redis nodes"
-  type        = string
-  default     = "cache.t3.micro"
-}
-
-variable "redis_num_cache_nodes" {
-  description = "Number of cache nodes for Redis"
-  type        = number
-  default     = 1
-}
-
-variable "redis_parameter_group_name" {
-  description = "Name of the parameter group for Redis"
-  type        = string
-  default     = "default.redis6.x"
-}
-
-variable "redis_engine_version" {
-  description = "Redis engine version"
-  type        = string
-  default     = "6.x"
-}

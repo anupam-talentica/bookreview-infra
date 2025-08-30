@@ -4,9 +4,6 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   
-  # Enable DNS hostnames for better instance hostname resolution
-  enable_dns_hostnames = true
-  
   tags = {
     Name        = "${var.environment}-vpc"
     Environment = var.environment
@@ -16,14 +13,14 @@ resource "aws_vpc" "main" {
 
 # Public Subnets (minimal for NAT Gateway)
 resource "aws_subnet" "public" {
-  count                   = 1  # Only one public subnet for NAT Gateway to save costs
+  count                   = min(2, length(var.availability_zones))  # Create in 2 AZs for high availability
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = cidrsubnet(var.vpc_cidr, 8, 0)  # 10.0.0.0/24
-  availability_zone       = var.availability_zones[0]  # Use first AZ only
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index)  # 10.0.0.0/24, 10.0.1.0/24
+  availability_zone       = var.availability_zones[count.index]
   map_public_ip_on_launch = true
   
   tags = {
-    Name        = "${var.environment}-public-1"
+    Name        = "${var.environment}-public-${count.index + 1}"
     Environment = var.environment
     Type        = "public"
     CostCenter  = "bookreview-${var.environment}"
@@ -32,13 +29,13 @@ resource "aws_subnet" "public" {
 
 # Private Subnets
 resource "aws_subnet" "private" {
-  count             = 1  # Only one private subnet to minimize costs
+  count             = min(2, length(var.availability_zones))  # Create in 2 AZs for high availability
   vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 10)  # 10.0.10.0/24
-  availability_zone = var.availability_zones[0]  # Use first AZ only
+  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 10 + count.index)  # 10.0.10.0/24, 10.0.11.0/24
+  availability_zone = var.availability_zones[count.index]
   
   tags = {
-    Name        = "${var.environment}-private-1"
+    Name        = "${var.environment}-private-${count.index + 1}"
     Environment = var.environment
     Type        = "private"
     CostCenter  = "bookreview-${var.environment}"
@@ -95,7 +92,7 @@ resource "aws_eip" "nat" {
 # NAT Gateway (smallest size)
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public[0].id
+  subnet_id     = aws_subnet.public[0].id  # Only need one NAT Gateway for cost optimization
   
   tags = {
     Name        = "${var.environment}-nat"
@@ -122,9 +119,19 @@ resource "aws_route_table" "private" {
   }
 }
 
-# Route Table Association for Private Subnet
+# Output the private subnet IDs for ALB and other resources
+output "private_subnet_ids" {
+  value = aws_subnet.private[*].id
+}
+
+output "public_subnet_ids" {
+  value = aws_subnet.public[*].id
+}
+
+# Route Table Association for Private Subnets
 resource "aws_route_table_association" "private" {
-  subnet_id      = aws_subnet.private[0].id
+  count          = length(aws_subnet.private)
+  subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
 }
 

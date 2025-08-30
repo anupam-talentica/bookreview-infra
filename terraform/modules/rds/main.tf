@@ -13,7 +13,7 @@ resource "aws_db_subnet_group" "main" {
 # RDS Parameter Group
 resource "aws_db_parameter_group" "main" {
   name        = "${var.environment}-postgres-pg"
-  family      = "postgres15"
+  family      = "postgres17"
   description = "Parameter group for ${var.environment} PostgreSQL database"
   
   parameter {
@@ -36,12 +36,18 @@ resource "aws_db_parameter_group" "main" {
 resource "aws_db_instance" "main" {
   identifier             = "${var.environment}-postgres-db"
   engine                 = "postgres"
-  engine_version         = "15.5"
+  engine_version         = "17.6"
   instance_class         = "db.t3.micro"  # Cheapest non-burstable is db.t4g.micro (ARM-based, ~20% cheaper)
   allocated_storage      = 10              # Minimum is 10GB
   max_allocated_storage  = 20              # Reduced from 100GB to 20GB
   storage_type           = "gp3"
   storage_encrypted      = true
+  
+  # Allow major version upgrades
+  allow_major_version_upgrade = true
+  
+  # Apply changes immediately
+  apply_immediately      = true
   
   # Performance Insights (disable for cost savings)
   performance_insights_enabled = false

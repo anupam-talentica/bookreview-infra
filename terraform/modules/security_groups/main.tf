@@ -25,18 +25,26 @@ resource "aws_security_group" "rds" {
   }
 }
 
-# Security group for ElastiCache
-resource "aws_security_group" "elasticache" {
-  name        = "${var.environment}-elasticache-sg"
-  description = "Security group for ElastiCache Redis"
+# Security group for Application Load Balancer
+resource "aws_security_group" "alb" {
+  name        = "${var.environment}-alb-sg"
+  description = "Security group for Application Load Balancer"
   vpc_id      = var.vpc_id
   
   ingress {
-    from_port   = 6379
-    to_port     = 6379
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [var.vpc_cidr]
-    description = "Allow Redis access from within VPC"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow HTTP access from anywhere"
+  }
+  
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow HTTPS access from anywhere"
   }
   
   egress {
@@ -47,7 +55,7 @@ resource "aws_security_group" "elasticache" {
   }
   
   tags = {
-    Name        = "${var.environment}-elasticache-sg"
+    Name        = "${var.environment}-alb-sg"
     Environment = var.environment
   }
 }
