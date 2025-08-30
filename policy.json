@@ -1,0 +1,124 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateServiceLinkedRole",
+                "ec2:Describe*",
+                "ec2:CreateVpcEndpoint",
+                "ec2:DescribeVpcEndpoints",
+                "ec2:ModifyVpcEndpoint",
+                "ec2:DeleteVpcEndpoints",
+                "ec2:CreateVpc",
+                "ec2:ModifyVpcAttribute",
+                "ec2:CreateSubnet",
+                "ec2:ModifySubnetAttribute",
+                "ec2:CreateInternetGateway",
+                "ec2:AttachInternetGateway",
+                "ec2:CreateRoute",
+                "ec2:CreateRouteTable",
+                "ec2:AssociateRouteTable",
+                "ec2:AllocateAddress",
+                "ec2:CreateNatGateway",
+                "ec2:CreateSecurityGroup",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:AuthorizeSecurityGroupEgress",
+                "ec2:CreateTags",
+                "ec2:RunInstances",
+                "ec2:TerminateInstances",
+                "ec2:DeleteSecurityGroup",
+                "ec2:DeleteSubnet",
+                "ec2:DeleteVpc",
+                "ec2:DeleteInternetGateway",
+                "ec2:DetachInternetGateway",
+                "ec2:DeleteNatGateway",
+                "ec2:ReleaseAddress",
+                "ec2:DeleteRouteTable",
+                "ec2:DisassociateRouteTable",
+                "ec2:DeleteRoute",
+                "ec2:RevokeSecurityGroupEgress",
+                "ec2:CreateSubnet",
+                "ec2:DescribeAvailabilityZones"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "rds:CreateDBInstance",
+                "rds:DescribeDBInstances",
+                "rds:DescribeDBEngineVersions",
+                "rds:ModifyDBInstance",
+                "rds:DeleteDBInstance",
+                "rds:CreateDBSubnetGroup",
+                "rds:DescribeDBSubnetGroups",
+                "rds:ModifyDBSubnetGroup",
+                "rds:DeleteDBSubnetGroup",
+                "rds:CreateDBParameterGroup",
+                "rds:DescribeDBParameterGroups",
+                "rds:ModifyDBParameterGroup",
+                "rds:DeleteDBParameterGroup",
+                "rds:AddTagsToResource",
+                "rds:ListTagsForResource",
+                "rds:RemoveTagsFromResource",
+                "rds:DescribeDBParameters"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "elasticache:CreateCacheCluster",
+                "elasticache:DescribeCacheClusters",
+                "elasticache:ModifyCacheCluster",
+                "elasticache:DeleteCacheCluster",
+                "elasticache:CreateCacheSubnetGroup",
+                "elasticache:DescribeCacheSubnetGroups",
+                "elasticache:ModifyCacheSubnetGroup",
+                "elasticache:DeleteCacheSubnetGroup",
+                "elasticache:CreateCacheParameterGroup",
+                "elasticache:DescribeCacheParameterGroups",
+                "elasticache:ModifyCacheParameterGroup",
+                "elasticache:DeleteCacheParameterGroup",
+                "elasticache:AddTagsToResource",
+                "elasticache:ListTagsForResource",
+                "elasticache:RemoveTagsFromResource"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateRole",
+                "iam:GetRole",
+                "iam:AttachRolePolicy",
+                "iam:DetachRolePolicy",
+                "iam:DeleteRole",
+                "iam:PassRole",
+                "iam:TagRole",
+                "iam:ListRolePolicies",
+                "iam:GetRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:GetRole",
+                "iam:UpdateRole",
+                "iam:CreateServiceLinkedRole",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListInstanceProfilesForRole",
+                "iam:ListRoleTags"
+            ],
+            "Resource": "arn:aws:iam::*:role/*enhanced-monitoring-role*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:PutRetentionPolicy",
+                "logs:DeleteLogGroup",
+                "logs:DescribeLogGroups"
+            ],
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/rds/*"
+        }
+    ]
+}
