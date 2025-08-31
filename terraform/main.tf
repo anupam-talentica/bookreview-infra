@@ -64,16 +64,17 @@ resource "aws_lb" "main" {
 module "ecs" {
   source = "./modules/ecs"
   
-  environment        = var.environment
-  vpc_id             = module.vpc.vpc_id
-  private_subnet_ids = module.vpc.private_subnet_ids
-  aws_region        = var.aws_region
-  db_endpoint       = module.rds.rds_endpoint
-  db_name           = var.db_name
-  db_username       = var.db_username
-  db_password       = var.db_password
-  ecr_repository_url = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/bookreview-backend"
-  alb_arn           = aws_lb.main.arn
+  environment           = var.environment
+  vpc_id               = module.vpc.vpc_id
+  private_subnet_ids   = module.vpc.private_subnet_ids
+  aws_region          = var.aws_region
+  db_endpoint         = module.rds.rds_endpoint
+  db_name             = var.db_name
+  db_username         = var.db_username
+  db_password         = var.db_password
+  ecr_repository_url  = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/bookreview-backend"
+  alb_arn             = aws_lb.main.arn
+  alb_security_group_id = module.security_groups.alb_security_group_id
 }
 
 data "aws_caller_identity" "current" {}

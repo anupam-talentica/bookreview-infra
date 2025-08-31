@@ -49,3 +49,8 @@ variable "alb_arn" {
   description = "ARN of the Application Load Balancer"
   type        = string
 }
+
+variable "alb_security_group_id" {
+  description = "Security group ID of the Application Load Balancer"
+  type        = string
+}

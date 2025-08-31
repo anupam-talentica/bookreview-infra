@@ -143,6 +143,15 @@ resource "aws_security_group" "ecs_service" {
   description = "Security group for ECS service"
   vpc_id      = var.vpc_id
 
+  # Allow inbound traffic from ALB on port 8080
+  ingress {
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    security_groups = [var.alb_security_group_id]
+    description     = "Allow traffic from ALB to ECS tasks"
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
