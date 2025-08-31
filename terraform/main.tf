@@ -78,3 +78,125 @@ module "ecs" {
 }
 
 data "aws_caller_identity" "current" {}
+
+# S3 Buckets for Frontend Hosting
+resource "aws_s3_bucket" "frontend_production" {
+  bucket = "bookreview-frontend"
+
+  tags = {
+    Environment = var.environment
+    Name        = "bookreview-frontend"
+    Purpose     = "Frontend hosting - Production"
+  }
+}
+
+resource "aws_s3_bucket" "frontend_staging" {
+  bucket = "bookreview-frontend-staging"
+
+  tags = {
+    Environment = "staging"
+    Name        = "bookreview-frontend-staging"
+    Purpose     = "Frontend hosting - Staging"
+  }
+}
+
+# S3 Bucket for Images (Backend)
+resource "aws_s3_bucket" "images" {
+  bucket = "bookreview-images-${var.environment}"
+
+  tags = {
+    Environment = var.environment
+    Name        = "bookreview-images-${var.environment}"
+    Purpose     = "Image storage"
+  }
+}
+
+# S3 Bucket Website Configuration
+resource "aws_s3_bucket_website_configuration" "frontend_production" {
+  bucket = aws_s3_bucket.frontend_production.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_website_configuration" "frontend_staging" {
+  bucket = aws_s3_bucket.frontend_staging.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "index.html"
+  }
+}
+
+# S3 Bucket Public Access Configuration
+resource "aws_s3_bucket_public_access_block" "frontend_production" {
+  bucket = aws_s3_bucket.frontend_production.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_public_access_block" "frontend_staging" {
+  bucket = aws_s3_bucket.frontend_staging.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_public_access_block" "images" {
+  bucket = aws_s3_bucket.images.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+# S3 Bucket Policy for Frontend (Public Read)
+resource "aws_s3_bucket_policy" "frontend_production" {
+  bucket = aws_s3_bucket.frontend_production.id
+  depends_on = [aws_s3_bucket_public_access_block.frontend_production]
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "PublicReadGetObject"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.frontend_production.arn}/*"
+      },
+    ]
+  })
+}
+
+resource "aws_s3_bucket_policy" "frontend_staging" {
+  bucket = aws_s3_bucket.frontend_staging.id
+  depends_on = [aws_s3_bucket_public_access_block.frontend_staging]
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "PublicReadGetObject"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.frontend_staging.arn}/*"
+      },
+    ]
+  })
+}

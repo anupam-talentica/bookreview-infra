@@ -4,8 +4,38 @@
         {
             "Effect": "Allow",
             "Action": [
+                "iam:CreateRole",
+                "iam:GetRole",
+                "iam:AttachRolePolicy",
+                "iam:DetachRolePolicy",
+                "iam:DeleteRole",
+                "iam:PassRole",
+                "iam:TagRole",
+                "iam:ListRolePolicies",
+                "iam:GetRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:UpdateRole",
+                "iam:CreateServiceLinkedRole",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListInstanceProfilesForRole",
+                "iam:ListRoleTags"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:role/*ecs*",
+                "arn:aws:iam::*:role/*Ecs*",
+                "arn:aws:iam::*:role/*ECS*",
+                "arn:aws:iam::*:role/dev-ecs-*",
+                "arn:aws:iam::*:role/*enhanced-monitoring-role*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
                 "iam:CreateServiceLinkedRole",
                 "ec2:Describe*",
+                "ec2:DetachNetworkInterface",
+                "ec2:DeleteNetworkInterface",
                 "ec2:CreateVpcEndpoint",
                 "ec2:DescribeVpcEndpoints",
                 "ec2:ModifyVpcEndpoint",
@@ -62,28 +92,35 @@
                 "rds:AddTagsToResource",
                 "rds:ListTagsForResource",
                 "rds:RemoveTagsFromResource",
-                "rds:DescribeDBParameters"
+                "rds:DescribeDBParameters",
+                "rds:ModifyDBInstance",
+                "rds:ModifyDBParameterGroup",
+                "rds:DeleteDBParameterGroup",
+                "rds:ModifyDBInstance",
+                "rds:ModifyDBParameterGroup",
+                "rds:DeleteDBParameterGroup",
+                "rds:ModifyDBInstance"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
             "Action": [
-                "elasticache:CreateCacheCluster",
-                "elasticache:DescribeCacheClusters",
-                "elasticache:ModifyCacheCluster",
-                "elasticache:DeleteCacheCluster",
-                "elasticache:CreateCacheSubnetGroup",
-                "elasticache:DescribeCacheSubnetGroups",
-                "elasticache:ModifyCacheSubnetGroup",
-                "elasticache:DeleteCacheSubnetGroup",
-                "elasticache:CreateCacheParameterGroup",
-                "elasticache:DescribeCacheParameterGroups",
-                "elasticache:ModifyCacheParameterGroup",
-                "elasticache:DeleteCacheParameterGroup",
-                "elasticache:AddTagsToResource",
-                "elasticache:ListTagsForResource",
-                "elasticache:RemoveTagsFromResource"
+                "elasticache:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "elasticloadbalancing:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecs:*"
             ],
             "Resource": "*"
         },
@@ -101,14 +138,38 @@
                 "iam:GetRolePolicy",
                 "iam:PutRolePolicy",
                 "iam:DeleteRolePolicy",
-                "iam:GetRole",
                 "iam:UpdateRole",
                 "iam:CreateServiceLinkedRole",
                 "iam:ListAttachedRolePolicies",
                 "iam:ListInstanceProfilesForRole",
                 "iam:ListRoleTags"
             ],
-            "Resource": "arn:aws:iam::*:role/*enhanced-monitoring-role*"
+            "Resource": [
+                "arn:aws:iam::*:role/*",
+                "arn:aws:iam::*:role/*ecs*",
+                "arn:aws:iam::*:role/*Ecs*",
+                "arn:aws:iam::*:role/*ECS*",
+                "arn:aws:iam::*:role/*enhanced-monitoring-role*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:GetRepositoryPolicy",
+                "ecr:DescribeRepositories",
+                "ecr:ListImages",
+                "ecr:DescribeImages",
+                "ecr:BatchGetImage",
+                "ecr:InitiateLayerUpload",
+                "ecr:UploadLayerPart",
+                "ecr:CompleteLayerUpload",
+                "ecr:PutImage",
+                "ecr:CreateRepository"
+            ],
+            "Resource": "*"
         },
         {
             "Effect": "Allow",
@@ -119,6 +180,98 @@
                 "logs:DescribeLogGroups"
             ],
             "Resource": "arn:aws:logs:*:*:log-group:/aws/rds/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ecs:UpdateService",
+            "Resource": "arn:aws:ecs:ap-south-1:142177209568:service/bookreview-cluster/bookreview-backend-service"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:CreateBucket",
+                "s3:DeleteBucket",
+                "s3:GetBucketLocation",
+                "s3:GetBucketVersioning",
+                "s3:GetBucketAcl",
+                "s3:GetBucketCORS",
+                "s3:GetBucketWebsite",
+                "s3:GetBucketTagging",
+                "s3:GetBucketPolicy",
+                "s3:GetBucketPolicyStatus",
+                "s3:GetBucketPublicAccessBlock",
+                "s3:GetBucketNotification",
+                "s3:GetBucketLogging",
+                "s3:GetBucketRequestPayment",
+                "s3:GetBucketAccelerateConfiguration",
+                "s3:GetEncryptionConfiguration",
+                "s3:GetLifecycleConfiguration",
+                "s3:GetReplicationConfiguration",
+                "s3:ListBucket",
+                "s3:ListBucketVersions",
+                "s3:ListBucketMultipartUploads",
+                "s3:PutBucketPolicy",
+                "s3:PutBucketAcl",
+                "s3:PutBucketCORS",
+                "s3:PutBucketWebsite",
+                "s3:PutBucketTagging",
+                "s3:PutBucketVersioning",
+                "s3:PutBucketNotification",
+                "s3:PutBucketLogging",
+                "s3:PutBucketRequestPayment",
+                "s3:PutBucketAccelerateConfiguration",
+                "s3:PutEncryptionConfiguration",
+                "s3:PutLifecycleConfiguration",
+                "s3:PutReplicationConfiguration",
+                "s3:PutBucketPublicAccessBlock",
+                "s3:DeleteBucketPolicy",
+                "s3:DeleteBucketWebsite",
+                "s3:DeleteBucketTagging",
+                "s3:DeleteBucketCORS",
+                "s3:DeleteBucketNotification",
+                "s3:DeleteBucketLogging",
+                "s3:DeleteEncryptionConfiguration",
+                "s3:DeleteLifecycleConfiguration",
+                "s3:DeleteReplicationConfiguration",
+                "s3:DeleteBucketPublicAccessBlock"
+            ],
+            "Resource": [
+                "arn:aws:s3:::bookreview-*",
+                "arn:aws:s3:::bookreview-*/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectAcl",
+                "s3:GetObjectVersion",
+                "s3:GetObjectVersionAcl",
+                "s3:GetObjectTagging",
+                "s3:GetObjectVersionTagging",
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:DeleteObject",
+                "s3:DeleteObjectVersion",
+                "s3:DeleteObjectTagging",
+                "s3:DeleteObjectVersionTagging",
+                "s3:RestoreObject",
+                "s3:AbortMultipartUpload",
+                "s3:ListMultipartUploadParts"
+            ],
+            "Resource": [
+                "arn:aws:s3:::bookreview-*/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": "*"
         }
     ]
 }
